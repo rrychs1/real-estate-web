@@ -5,12 +5,27 @@ import { PropertyCard } from "@/components/ui/PropertyCard";
 import { MOCK_PROPERTIES } from "@/lib/mock-data";
 import { Filter, ChevronDown } from "lucide-react";
 
-export default function PropertiesPage() {
-    const [activeType, setActiveType] = useState<'todos' | 'venta' | 'alquiler'>('todos');
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-    const filteredProperties = activeType === 'todos'
-        ? MOCK_PROPERTIES
-        : MOCK_PROPERTIES.filter(p => p.type === activeType);
+// ... imports
+
+function PropertiesContent() {
+    const [activeType, setActiveType] = useState<'todos' | 'venta' | 'alquiler'>('todos');
+    const searchParams = useSearchParams();
+    const query = searchParams.get('q')?.toLowerCase() || "";
+    const location = searchParams.get('location')?.toLowerCase() || "";
+
+    const filteredProperties = MOCK_PROPERTIES.filter(property => {
+        const matchesType = activeType === 'todos' || property.type === activeType;
+        const matchesQuery = query === "" ||
+            property.title.toLowerCase().includes(query) ||
+            property.location.city.toLowerCase().includes(query) ||
+            property.location.neighborhood.toLowerCase().includes(query);
+        const matchesLocation = location === "" || property.location.city.toLowerCase().includes(location);
+
+        return matchesType && matchesQuery && matchesLocation;
+    });
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
@@ -18,7 +33,11 @@ export default function PropertiesPage() {
             <div className="bg-white shadow-sm py-8 mb-8">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-serif font-bold text-gray-900">Propiedades Disponibles</h1>
-                    <p className="text-gray-500 mt-2">Encuentra el lugar perfecto en nuestra exclusiva selección.</p>
+                    <p className="text-gray-500 mt-2">
+                        {query
+                            ? `Resultados para "${query}"`
+                            : "Encuentra el lugar perfecto en nuestra exclusiva selección."}
+                    </p>
                 </div>
             </div>
 
@@ -69,11 +88,16 @@ export default function PropertiesPage() {
                                 </div>
                             </div>
 
-                            {/* Location Placeholder */}
+                            {/* Location Filter */}
                             <div className="mb-6">
                                 <h3 className="font-semibold text-gray-700 mb-3">Ubicación</h3>
                                 <div className="relative">
-                                    <select className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-primary">
+                                    <select
+                                        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-primary"
+                                        onChange={(e) => {
+                                            // Ideally this would update URL params, keeping it simple for now
+                                        }}
+                                    >
                                         <option>Todas las ciudades</option>
                                         <option>Bogotá</option>
                                         <option>Medellín</option>
@@ -120,5 +144,13 @@ export default function PropertiesPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PropertiesPage() {
+    return (
+        <Suspense fallback={<div>Cargando...</div>}>
+            <PropertiesContent />
+        </Suspense>
     );
 }
