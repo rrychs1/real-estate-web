@@ -16,17 +16,30 @@ export default function PropertiesClient({ properties }: PropertiesClientProps) 
     const searchParams = useSearchParams();
     const router = useRouter();
 
+    // Helper to normalize text for accent-insensitive search
+    const normalizeText = (text: string) => {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
+
     // Get filters from URL or default
-    const query = searchParams.get('q')?.toLowerCase() || "";
-    const locationFilter = searchParams.get('location')?.toLowerCase() || "";
+    const query = searchParams.get('q') || "";
+    const locationFilter = searchParams.get('location') || "";
 
     const filteredProperties = properties.filter(property => {
         const matchesType = activeType === 'todos' || property.operationType === activeType;
+
+        const normalizedQuery = normalizeText(query);
+        const normalizedTitle = normalizeText(property.title);
+        const normalizedCity = normalizeText(property.location.city);
+        const normalizedNeighborhood = normalizeText(property.location.neighborhood || "");
+
         const matchesQuery = query === "" ||
-            property.title.toLowerCase().includes(query) ||
-            property.location.city.toLowerCase().includes(query) ||
-            (property.location.neighborhood || "").toLowerCase().includes(query);
-        const matchesLocation = locationFilter === "" || property.location.city.toLowerCase().includes(locationFilter);
+            normalizedTitle.includes(normalizedQuery) ||
+            normalizedCity.includes(normalizedQuery) ||
+            normalizedNeighborhood.includes(normalizedQuery);
+
+        const matchesLocation = locationFilter === "" ||
+            normalizeText(property.location.city).includes(normalizeText(locationFilter));
 
         return matchesType && matchesQuery && matchesLocation;
     });
@@ -139,8 +152,12 @@ export default function PropertiesClient({ properties }: PropertiesClientProps) 
                                         title: property.title,
                                         type: property.operationType,
                                         price: property.price,
-                                        // Use urlFor for image, handle nulls
-                                        image: property.mainImage ? urlFor(property.mainImage).url() : "https://images.unsplash.com/photo-1600596542815-27b88e39e140?auto=format&fit=crop&q=80&w=800",
+                                        // Use urlFor for Sanity image, or use direct url from mock
+                                        images: [property.mainImage?.asset?.url || (property.mainImage ? urlFor(property.mainImage).url() : "https://images.unsplash.com/photo-1600596542815-27b88e39e140?auto=format&fit=crop&q=80&w=800")],
+                                        category: 'casa', // Default or map from CMS if available
+                                        currency: property.currency || 'COP',
+                                        description: property.description || '',
+                                        slug: property._id, // Ideally should be real slug if available
                                         location: {
                                             city: property.location.city,
                                             neighborhood: property.location.neighborhood || ""
@@ -148,7 +165,8 @@ export default function PropertiesClient({ properties }: PropertiesClientProps) 
                                         features: {
                                             area: property.area,
                                             bedrooms: property.rooms,
-                                            bathrooms: property.bathrooms
+                                            bathrooms: property.bathrooms,
+                                            parking: property.parking || 0
                                         }
                                     }}
                                 />

@@ -20,7 +20,20 @@ async function getProperties(): Promise<Property[]> {
         amenities,
         highlighted
     }`;
-    return client.fetch(query, {}, { cache: 'no-store' }); // Disable cache for dev
+    try {
+        const data = await client.fetch(query, {}, { cache: 'no-store' });
+        if (!data || data.length === 0) {
+            console.log("No content found in Sanity, using mock data for demo.");
+            // Cast to any to bypass strict type check for now, ensuring shape matches broadly
+            const { mockProperties } = await import("@/lib/mockData");
+            return mockProperties as any as Property[];
+        }
+        return data;
+    } catch (error) {
+        console.error("Error fetching properties, using mock fallback:", error);
+        const { mockProperties } = await import("@/lib/mockData");
+        return mockProperties as any as Property[];
+    }
 }
 
 export default async function PropertiesPage() {

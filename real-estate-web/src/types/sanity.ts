@@ -19,5 +19,11 @@ export interface Property {
     gallery?: any[];
     description: string;
     amenities?: string[];
+    features?: string[];
+    commonZones?: string[];
+    videos?: {
+        title?: string;
+        url: string;
+    }[];
     highlighted?: boolean;
 }

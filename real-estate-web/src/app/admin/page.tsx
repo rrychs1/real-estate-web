@@ -19,20 +19,36 @@ async function getAdminData() {
     const countQuery = `count(*[_type == "property"])`;
 
     // We can run promises in parallel
-    const [properties, totalProperties] = await Promise.all([
-        client.fetch<Property[]>(propertiesQuery),
-        client.fetch<number>(countQuery)
-    ]);
+    try {
+        const [properties, totalProperties] = await Promise.all([
+            client.fetch<Property[]>(propertiesQuery, {}, { cache: 'no-store' }),
+            client.fetch<number>(countQuery, {}, { cache: 'no-store' })
+        ]);
 
-    return { properties, totalProperties };
+        return {
+            properties,
+            stats: {
+                totalProperties: totalProperties,
+                visits: 1250, // Placeholder
+                newContacts: 15 // Placeholder
+            }
+        };
+    } catch (error) {
+        console.error("Error fetching admin data:", error);
+        return {
+            properties: [],
+            stats: {
+                totalProperties: 0,
+                visits: 0,
+                newContacts: 0
+            }
+        };
+    }
 }
 
 export default async function AdminDashboard() {
-    const { properties, totalProperties } = await getAdminData();
-
-    // Mock analytics for now as they require a different backend/analytics service
-    const visits = "12.5k";
-    const newContacts = 45;
+    const { properties, stats } = await getAdminData();
+    const { totalProperties, visits, newContacts } = stats;
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">

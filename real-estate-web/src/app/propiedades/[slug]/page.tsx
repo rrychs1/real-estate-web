@@ -25,6 +25,9 @@ async function getProperty(slug: string): Promise<Property | null> {
         gallery,
         description,
         amenities,
+        features,
+        commonZones,
+        videos,
         highlighted
     }`;
     return client.fetch(query, { slug }, { cache: 'no-store' });
@@ -148,6 +151,53 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                                             <div key={idx} className="flex items-center gap-2">
                                                 <Check size={16} className="text-primary" />
                                                 <span className="capitalize">{amenity}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {property.features && property.features.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h3 className="text-lg font-bold font-serif mb-4 text-gray-900">Características Internas</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        {property.features.map((feature, idx) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                                                <span className="capitalize text-gray-700">{feature.replace(/_/g, ' ')}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {property.commonZones && property.commonZones.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h3 className="text-lg font-bold font-serif mb-4 text-gray-900">Zonas Comunes</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        {property.commonZones.map((zone, idx) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <div className="w-2 h-2 rounded-full bg-primary"></div>
+                                                <span className="capitalize text-gray-700">{zone.replace(/_/g, ' ')}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {property.videos && property.videos.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h3 className="text-lg font-bold font-serif mb-4 text-gray-900">Video Recorrido</h3>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {property.videos.map((video, idx) => (
+                                            <div key={idx} className="aspect-video bg-black rounded-lg overflow-hidden">
+                                                {/* Simple Video Embed Logic - transform typical youtube/vimeo urls */}
+                                                <iframe
+                                                    src={video.url.includes("view") ? video.url : video.url.replace("watch?v=", "embed/")}
+                                                    title={video.title || "Video Recorrido"}
+                                                    className="w-full h-full"
+                                                    allowFullScreen
+                                                />
                                             </div>
                                         ))}
                                     </div>

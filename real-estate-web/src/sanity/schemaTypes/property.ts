@@ -125,6 +125,84 @@ export const propertyType = defineType({
             }
         }),
         defineField({
+            name: 'features',
+            title: 'Características Internas',
+            type: 'array',
+            of: [{ type: 'string' }],
+            options: {
+                list: [
+                    { title: 'Aire Acondicionado', value: 'aire_acondicionado' },
+                    { title: 'Balcón', value: 'balcon' },
+                    { title: 'Baño de Servicio', value: 'bano_servicio' },
+                    { title: 'Barra Estilo Americano', value: 'barra_americana' },
+                    { title: 'Biblioteca/Estudio', value: 'biblioteca' },
+                    { title: 'Calentador', value: 'calentador' },
+                    { title: 'Chimenea', value: 'chimenea' },
+                    { title: 'Citófono', value: 'citofono' },
+                    { title: 'Cocina Integral', value: 'cocina_integral' },
+                    { title: 'Depósito / Bodega', value: 'deposito' },
+                    { title: 'Gas Domiciliario', value: 'gas_domiciliario' },
+                    { title: 'Habitación de Servicio', value: 'habitacion_servicio' },
+                    { title: 'Hall de Alcobas', value: 'hall_alcobas' },
+                    { title: 'Jacuzzi', value: 'jacuzzi' },
+                    { title: 'Piso en Madera/Laminado', value: 'piso_madera' },
+                    { title: 'Puerta de Seguridad', value: 'puerta_seguridad' },
+                    { title: 'Vista Panorámica', value: 'vista_panoramica' },
+                    { title: 'Zona de Lavandería', value: 'zona_lavanderia' },
+                ]
+            }
+        }),
+        defineField({
+            name: 'commonZones',
+            title: 'Zonas Comunes',
+            type: 'array',
+            of: [{ type: 'string' }],
+            options: {
+                list: [
+                    { title: 'Acceso Pavimentado', value: 'acceso_pavimentado' },
+                    { title: 'Área Social', value: 'area_social' },
+                    { title: 'Ascensor', value: 'ascensor' },
+                    { title: 'BBQ / Parrilla', value: 'bbq' },
+                    { title: 'Cancha de Baloncesto', value: 'cancha_baloncesto' },
+                    { title: 'Cancha de Fútbol', value: 'cancha_futbol' },
+                    { title: 'Cancha de Squash', value: 'cancha_squash' },
+                    { title: 'Cancha de Tenis', value: 'cancha_tenis' },
+                    { title: 'Circuito Cerrado de TV', value: 'cctv' },
+                    { title: 'Club House', value: 'club_house' },
+                    { title: 'Gimnasio', value: 'gimnasio' },
+                    { title: 'Jardín', value: 'jardin' },
+                    { title: 'Jaula de Golf', value: 'jaula_golf' },
+                    { title: 'Kiosko', value: 'kiosko' },
+                    { title: 'Parqueadero Visitantes', value: 'parqueadero_visitantes' },
+                    { title: 'Piscina', value: 'piscina' },
+                    { title: 'Planta Eléctrica', value: 'planta_electrica' },
+                    { title: 'Portería / Recepción', value: 'porteria' },
+                    { title: 'Salón Comunal', value: 'salon_comunal' },
+                    { title: 'Sauna / Turco', value: 'sauna_turco' },
+                    { title: 'Terraza', value: 'terraza' },
+                    { title: 'Urbanización Cerrada', value: 'urbanizacion_cerrada' },
+                    { title: 'Vigilancia 24/7', value: 'vigilancia' },
+                    { title: 'Zona Infantil', value: 'zona_infantil' },
+                    { title: 'Zonas Verdes', value: 'zonas_verdes' },
+                ]
+            }
+        }),
+        defineField({
+            name: 'videos',
+            title: 'Videos',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        { name: 'title', type: 'string', title: 'Título' },
+                        { name: 'url', type: 'url', title: 'URL del Video (YouTube / Vimeo)' }
+                    ]
+                }
+
+            ]
+        }),
+        defineField({
             name: 'highlighted',
             title: 'Destacado',
             type: 'boolean',
