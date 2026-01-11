@@ -1,17 +1,38 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { MOCK_PROPERTIES } from "@/lib/mock-data";
+import { client, urlFor } from "@/lib/sanity";
+import { Property } from "@/types/sanity";
 import { Bed, Bath, Square, MapPin, ArrowLeft, Phone, Mail, Check } from "lucide-react";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
+async function getProperty(slug: string): Promise<Property | null> {
+    const query = `*[_type == "property" && slug.current == $slug][0] {
+        _id,
+        title,
+        price,
+        currency,
+        operationType,
+        area,
+        rooms,
+        bathrooms,
+        parking,
+        location,
+        mainImage,
+        gallery,
+        description,
+        amenities,
+        highlighted
+    }`;
+    return client.fetch(query, { slug }, { cache: 'no-store' });
+}
+
 export default async function PropertyDetailPage({ params }: PageProps) {
-    // Await params in Next.js 15+
     const resolvedParams = await params;
-    const property = MOCK_PROPERTIES.find(p => p.slug === resolvedParams.slug);
+    const property = await getProperty(resolvedParams.slug);
 
     if (!property) {
         notFound();
@@ -44,13 +65,13 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
                             <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
                                 <div>
-                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white mb-2 ${property.type === 'venta' ? 'bg-primary' : 'bg-secondary'}`}>
-                                        {property.type === 'venta' ? 'En Venta' : 'Alquiler'}
+                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white mb-2 ${property.operationType === 'venta' ? 'bg-primary' : 'bg-secondary'}`}>
+                                        {property.operationType === 'venta' ? 'En Venta' : 'Alquiler'}
                                     </span>
                                     <h1 className="text-3xl font-bold font-serif text-gray-900">{property.title}</h1>
                                     <div className="flex items-center text-gray-500 mt-2">
                                         <MapPin size={18} className="mr-1 text-secondary" />
-                                        <span>{property.location.address}, {property.location.neighborhood}, {property.location.city}</span>
+                                        <span>{property.location.address ? `${property.location.address}, ` : ''}{property.location.neighborhood ? `${property.location.neighborhood}, ` : ''}{property.location.city}</span>
                                     </div>
                                 </div>
                                 <div className="mt-2 md:mt-0">
@@ -66,45 +87,49 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                                     <span className="text-gray-400 text-xs uppercase tracking-wide">Area</span>
                                     <div className="flex items-center font-semibold text-gray-800 gap-2">
                                         <Square size={20} className="text-secondary" />
-                                        <span>{property.features.area} m²</span>
+                                        <span>{property.area} m²</span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-gray-400 text-xs uppercase tracking-wide">Habitaciones</span>
                                     <div className="flex items-center font-semibold text-gray-800 gap-2">
                                         <Bed size={20} className="text-secondary" />
-                                        <span>{property.features.bedrooms}</span>
+                                        <span>{property.rooms}</span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-gray-400 text-xs uppercase tracking-wide">Baños</span>
                                     <div className="flex items-center font-semibold text-gray-800 gap-2">
                                         <Bath size={20} className="text-secondary" />
-                                        <span>{property.features.bathrooms}</span>
+                                        <span>{property.bathrooms}</span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-gray-400 text-xs uppercase tracking-wide">Parqueaderos</span>
                                     <div className="flex items-center font-semibold text-gray-800 gap-2">
                                         <div className="bg-secondary rounded-sm w-5 h-5 flex items-center justify-center text-white text-xs font-bold">P</div>
-                                        <span>{property.features.parking}</span>
+                                        <span>{property.parking}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Gallery (Main Image Mock) */}
+                        {/* Gallery */}
                         <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6 h-[400px] md:h-[500px] relative group">
-                            <Image
-                                src={property.images[0]}
-                                alt={property.title}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
-                                priority
-                            />
+                            {property.mainImage ? (
+                                <Image
+                                    src={urlFor(property.mainImage).url()}
+                                    alt={property.title}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
+                                    priority
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">Sin Imagen</div>
+                            )}
                             <div className="absolute bottom-4 right-4 bg-black/70 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-                                1/5 Fotos
+                                1/{property.gallery ? property.gallery.length + 1 : 1} Fotos
                             </div>
                         </div>
 
@@ -112,16 +137,22 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
                             <h2 className="text-xl font-bold font-serif mb-4 text-gray-900 border-b pb-2">Descripción</h2>
                             <div className="prose max-w-none text-gray-600">
-                                <p>{property.description}</p>
-                                <p className="mt-4">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </p>
-                                <p className="mt-4">
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p>
+                                <p className="whitespace-pre-line">{property.description}</p>
                             </div>
+
+                            {property.amenities && property.amenities.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h3 className="text-lg font-bold font-serif mb-4 text-gray-900">Amenidades</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        {property.amenities.map((amenity, idx) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <Check size={16} className="text-primary" />
+                                                <span className="capitalize">{amenity}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -130,7 +161,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 sticky top-24">
                             <h3 className="text-xl font-bold font-serif mb-4 text-gray-900">¿Te interesa?</h3>
                             <p className="text-gray-500 text-sm mb-6">
-                                Contacta a un asesor especializado sobre esta propiedad ref: <span className="font-mono text-gray-800">{String(property.id).padStart(4, '0')}</span>
+                                Contacta a un asesor especializado sobre esta propiedad ref: <span className="font-mono text-gray-800">{String(property._id).slice(-4)}</span>
                             </p>
 
                             <div className="flex items-center gap-4 mb-6">
