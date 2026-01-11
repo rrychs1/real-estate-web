@@ -1,0 +1,112 @@
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+
+export default function ContactPage() {
+    return (
+        <div className="bg-white pb-16">
+            <div className="bg-gray-50 py-12 mb-12 border-b border-gray-100">
+                <div className="container mx-auto px-4 text-center">
+                    <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Contáctanos</h1>
+                    <p className="text-gray-600 max-w-xl mx-auto">
+                        Estamos listos para asesorarte en la búsqueda de tu propiedad ideal.
+                        Escríbenos y un experto se pondrá en contacto contigo.
+                    </p>
+                </div>
+            </div>
+
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    {/* Contact Info */}
+                    <div>
+                        <h2 className="text-2xl font-bold font-serif mb-6 text-gray-900">Información de Contacto</h2>
+                        <div className="space-y-8">
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary shrink-0">
+                                    <MapPin size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-lg">Nuestra Oficina</h3>
+                                    <p className="text-gray-600">Av. Principal 123, Oficina 404<br />Ciudad Empresarial, Bogotá</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary shrink-0">
+                                    <Phone size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-lg">Llámanos</h3>
+                                    <p className="text-gray-600">
+                                        <a href="tel:+123456789" className="hover:text-secondary block">+57 (601) 123 4567</a>
+                                        <a href="tel:+198765432" className="hover:text-secondary block">+57 300 987 6543</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary shrink-0">
+                                    <Mail size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-lg">Escríbenos</h3>
+                                    <p className="text-gray-600">
+                                        <a href="mailto:info@raizrentable.com" className="hover:text-secondary">info@raizrentable.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-12 p-6 bg-gray-50 rounded-xl border border-gray-100">
+                            <h3 className="font-semibold text-lg mb-2">Horario de Atención</h3>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-medium block">Lunes a Viernes:</span> 8:00 AM - 6:00 PM
+                            </p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                <span className="font-medium block">Sábados:</span> 9:00 AM - 1:00 PM
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Contact Form */}
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
+                        <h2 className="text-2xl font-bold font-serif mb-6 text-gray-900">Envíanos un mensaje</h2>
+                        <form className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                                    <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+                                    <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+                                <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                                <input type="tel" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Asunto</label>
+                                <select className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors text-gray-600">
+                                    <option>Información general</option>
+                                    <option>Ventas</option>
+                                    <option>Arriendos</option>
+                                    <option>Proyectos</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
+                                <textarea rows={4} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors"></textarea>
+                            </div>
+
+                            <button type="submit" className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 text-lg">
+                                Enviar Mensaje <Send size={20} />
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
