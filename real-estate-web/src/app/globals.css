@@ -1,16 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  /* Fotocasa Brand Colors */
-  --color-primary: #e6007e; /* Magenta */
-  --color-secondary: #1e2c3a; /* Deep Blue */
-  --color-background: #ffffff; /* Clean White */
-  
-  --color-text-main: #1e2c3a; /* Deep Blue for main text */
-  --color-text-muted: #5e6d7a; /* Muted blue-grey */
-  
+  /* Idealista Brand Colors */
+  --color-primary: #B8D333;
+  /* Idealista Green */
+  --color-secondary: #BD1765;
+  /* Idealista Magenta */
+  --color-background: #ffffff;
+  /* Clean White */
+
+  --color-text-main: #1e2c3a;
+  /* Deep Blue for main text */
+  --color-text-muted: #5e6d7a;
+  /* Muted blue-grey */
+
   --font-sans: 'Nunito Sans', system-ui, sans-serif;
-  --font-serif: 'Nunito Sans', system-ui, sans-serif; /* Unify to sans for portal look */
+  --font-serif: 'Nunito Sans', system-ui, sans-serif;
+  /* Unify to sans for portal look */
 
   /* Animations */
   --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
