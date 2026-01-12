@@ -1,6 +1,8 @@
 // Admin authentication proxy - Protects /admin routes with HTTP Basic Auth
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'edge';
+
 export const config = {
     matcher: ['/admin/:path*'],
 };
