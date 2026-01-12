@@ -1,55 +1,13 @@
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-// Check HTTP Basic Auth credentials
-async function checkAuth() {
-    const headersList = await headers();
-    const authorization = headersList.get('authorization');
-
-    if (!authorization) {
-        return false;
-    }
-
-    try {
-        const authValue = authorization.split(' ')[1];
-        const [user, pwd] = atob(authValue).split(':');
-
-        const validUser = process.env.ADMIN_USER || 'admin';
-        const validPass = process.env.ADMIN_PASSWORD || 'admin123';
-
-        return user === validUser && pwd === validPass;
-    } catch {
-        return false;
-    }
-}
-
-// Unauthorized page component
-function UnauthorizedPage() {
-    return (
-        <html>
-            <head>
-                <title>Auth Required</title>
-            </head>
-            <body style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                fontFamily: 'system-ui, sans-serif',
-                backgroundColor: '#f5f5f5'
-            }}>
-                <div style={{ textAlign: 'center' }}>
-                    <h1 style={{ color: '#333' }}>🔒 Autenticación Requerida</h1>
-                    <p style={{ color: '#666' }}>Por favor ingresa tus credenciales para acceder al panel de administración.</p>
-                    <p style={{ color: '#999', fontSize: '12px' }}>
-                        Recarga la página para mostrar el diálogo de autenticación.
-                    </p>
-                </div>
-            </body>
-        </html>
-    );
+// Check if user has valid auth cookie
+async function isAuthenticated() {
+    const cookieStore = await cookies();
+    const authCookie = cookieStore.get('admin_auth');
+    return !!authCookie?.value;
 }
 
 export default async function AdminLayout({
@@ -57,12 +15,22 @@ export default async function AdminLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const isAuthenticated = await checkAuth();
+    const isAuth = await isAuthenticated();
 
-    if (!isAuthenticated) {
-        // Layouts can't return Response, so we render a page that tells the user to authenticate
-        // The middleware should handle the 401 response, but as a fallback show this message
-        return <UnauthorizedPage />;
+    // Skip auth check for login page
+    return <>{children}</>;
+}
+
+// Separate component for protected routes
+export async function ProtectedAdminContent({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    const isAuth = await isAuthenticated();
+
+    if (!isAuth) {
+        redirect('/admin/login');
     }
 
     return <>{children}</>;
