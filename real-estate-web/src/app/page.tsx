@@ -87,11 +87,11 @@ export default function Home() {
             {/* Placeholder for property images montage */}
             <div className="grid grid-cols-2 gap-4">
               <div
-                className="h-72 rounded-2xl bg-slate-300 bg-cover bg-center shadow-xl image-gradual transform translate-y-4"
+                className="h-72 rounded-2xl bg-slate-300 bg-cover bg-center shadow-xl image-gradual"
                 style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop")' }}
               />
               <div
-                className="h-72 rounded-2xl bg-slate-300 bg-cover bg-center shadow-xl image-gradual transform -translate-y-4"
+                className="h-72 rounded-2xl bg-slate-300 bg-cover bg-center shadow-xl image-gradual"
                 style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop")' }}
               />
             </div>
