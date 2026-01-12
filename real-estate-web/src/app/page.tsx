@@ -12,9 +12,9 @@ export default function Home() {
         <HeroBackground />
 
         <div className="relative z-10 container mx-auto px-4 text-center text-white mt-10">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-serif mb-8 leading-tight text-balance drop-shadow-2xl animate-in slide-in-from-bottom-8 fade-in duration-1000 fill-mode-forwards">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-serif mb-8 leading-tight text-balance drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] animate-in slide-in-from-bottom-8 fade-in duration-1000 fill-mode-forwards text-slate-100">
             Encuentra el Espacio <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-slate-400 to-slate-600">
               Donde Perteneces
             </span>
           </h1>
