@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Search, CheckCircle } from "lucide-react";
 import { HeroSearch } from "@/components/ui/HeroSearch";
+import { HeroBackground } from "@/components/ui/HeroBackground";
 
 export default function Home() {
   return (
@@ -8,16 +9,14 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[80vh] w-full bg-slate-900 flex items-center justify-center overflow-hidden">
         {/* Placeholder for background image */}
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-60"
-          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600596542815-e328701102b9?q=80&w=2069&auto=format&fit=crop")' }}
-        ></div>
+        {/* Background Image with Enhanced Gradient Overlay */}
+        <HeroBackground />
 
-        <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-serif mb-6 leading-tight text-balance">
+        <div className="relative z-10 container mx-auto px-4 text-center text-white mt-10">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-serif mb-6 leading-tight text-balance drop-shadow-xl animate-in slide-in-from-bottom-8 duration-700">
             Encuentra el Espacio <br /> Donde Perteneces
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto text-balance">
+          <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto text-balance drop-shadow-md animate-in slide-in-from-bottom-10 duration-1000">
             Propiedades exclusivas seleccionadas para un estilo de vida exigente.
             Compra, vende o alquila con la confianza de los mejores.
           </p>
