@@ -23,11 +23,12 @@ export default async function ProjectsPage() {
     return (
         <div className="min-h-screen bg-white pb-16">
             {/* Hero Banner */}
-            <div className="bg-slate-900 text-white py-20">
+            {/* Hero Banner */}
+            <div className="bg-white text-gray-900 py-12 shadow-sm">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <span className="text-secondary font-bold tracking-wider uppercase mb-2 block">Inversión Inteligente</span>
-                    <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Proyectos Destacados</h1>
-                    <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                    <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-gray-900">Proyectos Destacados</h1>
+                    <p className="text-xl text-gray-500 max-w-2xl mx-auto">
                         Descubre oportunidades de inversión en desarrollo con alto potencial de valorización y rentabilidad.
                     </p>
                 </div>
