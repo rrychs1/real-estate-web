@@ -25,7 +25,7 @@ export default {
             },
             fontFamily: {
                 sans: ["var(--font-sans)"],
-                serif: ["var(--font-serif)"],
+                serif: ["var(--font-sans)"], // Fallback to sans for consistency
             },
             borderRadius: {
                 'card': '1.5rem', // Consistent 24px radius for cards

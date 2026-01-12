@@ -1,18 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #8E9EAB;
-  /* Slate blue/grey */
-  --color-secondary: #D4B996;
-  /* Soft gold/beige */
-  --color-background: #F8FAFC;
-  /* Slightly cooler white/grey */
-  --color-text-main: #334155;
-  /* Slate 700 */
-  --color-text-muted: #64748B;
-  /* Slate 500 */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  /* Fotocasa Brand Colors */
+  --color-primary: #e6007e; /* Magenta */
+  --color-secondary: #1e2c3a; /* Deep Blue */
+  --color-background: #ffffff; /* Clean White */
+  
+  --color-text-main: #1e2c3a; /* Deep Blue for main text */
+  --color-text-muted: #5e6d7a; /* Muted blue-grey */
+  
+  --font-sans: 'Nunito Sans', system-ui, sans-serif;
+  --font-serif: 'Nunito Sans', system-ui, sans-serif; /* Unify to sans for portal look */
 
   /* Animations */
   --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;

@@ -43,7 +43,7 @@ export function Header() {
                     {/* CTA Button */}
                     <div className="hidden md:flex items-center">
                         <a
-                            href="https://wa.me/573001234567"
+                            href="https://wa.me/573166671927"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-[#25D366] hover:bg-[#128c7e] text-white px-6 py-2.5 rounded-button text-sm font-bold flex items-center gap-2 transition-transform hover:scale-105 shadow-lg hover:shadow-xl shadow-green-500/20"
@@ -81,7 +81,7 @@ export function Header() {
                             </Link>
                         ))}
                         <a
-                            href="https://wa.me/573001234567"
+                            href="https://wa.me/573166671927"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-full text-center mt-6 bg-[#25D366] text-white block px-4 py-3 rounded-xl text-lg font-bold hover:bg-[#128c7e] shadow-md"

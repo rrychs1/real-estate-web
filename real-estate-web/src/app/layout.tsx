@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-const inter = Inter({
+const nunito = Nunito_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-serif",
-  subsets: ["latin"],
+  weight: ["300", "400", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +24,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${playfair.variable} antialiased flex flex-col min-h-screen bg-background`}
+        className={`${nunito.variable} antialiased flex flex-col min-h-screen bg-background`}
       >
         <Header />
         <main className="flex-grow">

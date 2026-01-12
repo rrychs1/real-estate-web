@@ -37,7 +37,7 @@ export default function ContactPage() {
                                     <h3 className="font-semibold text-lg">Llámanos</h3>
                                     <p className="text-gray-600">
                                         <a href="https://wa.me/576011234567" target="_blank" rel="noopener noreferrer" className="hover:text-secondary block">+57 (601) 123 4567 (WhatsApp)</a>
-                                        <a href="https://wa.me/573009876543" target="_blank" rel="noopener noreferrer" className="hover:text-secondary block">+57 300 987 6543 (WhatsApp)</a>
+                                        <a href="https://wa.me/573166671927" target="_blank" rel="noopener noreferrer" className="hover:text-secondary block">+57 316 667 1927 (WhatsApp)</a>
                                     </p>
                                 </div>
                             </div>
