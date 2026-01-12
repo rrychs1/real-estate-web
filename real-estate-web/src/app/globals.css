@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #8E9EAB; /* Slate blue/grey */
-  --color-secondary: #D4B996; /* Soft gold/beige */
-  --color-background: #F9F9F9; /* Very light grey/white */
-  --color-text-main: #2C3E50; /* Dark slate for text */
-  --color-text-muted: #7F8C8D; /* Muted grey */
+  --color-primary: #8E9EAB;
+  /* Slate blue/grey */
+  --color-secondary: #D4B996;
+  /* Soft gold/beige */
+  --color-background: #F8FAFC;
+  /* Slightly cooler white/grey */
+  --color-text-main: #334155;
+  /* Slate 700 */
+  --color-text-muted: #64748B;
+  /* Slate 500 */
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Playfair Display', serif;
+
+  /* Animations */
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
 }
 
 /* Custom Utilities */
@@ -15,14 +23,39 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .image-gradual {
+    @apply transition-opacity duration-700 ease-in-out;
+  }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 body {
-    background-color: var(--color-background);
-    color: var(--color-text-main);
-    font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
 }

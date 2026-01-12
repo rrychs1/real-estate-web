@@ -33,8 +33,9 @@ export function HeroBackground() {
                 />
             </AnimatePresence>
 
-            {/* Reduced overlay opacity to make images more visible */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60"></div>
+            {/* Enhanced Gradient Overlay with Primary Tint */}
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-transparent to-slate-900/60 z-10" />
+            <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" /> {/* Subtle tint */}
         </div>
     );
 }
