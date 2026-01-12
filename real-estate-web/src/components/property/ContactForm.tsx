@@ -130,6 +130,7 @@ export default function ContactForm({ propertyTitle, propertyId }: ContactFormPr
             <button
                 type="button"
                 className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                onClick={() => window.open('https://wa.me/573001234567?text=Hola,%20estoy%20interesado%20en%20' + encodeURIComponent(propertyTitle), '_blank')}
             >
                 <Phone size={18} />
                 Hablar por WhatsApp

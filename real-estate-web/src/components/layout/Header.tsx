@@ -43,11 +43,13 @@ export function Header() {
                     {/* CTA Button */}
                     <div className="hidden md:flex items-center">
                         <a
-                            href="tel:+123456789"
+                            href="https://wa.me/573001234567"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="bg-primary text-white hover:bg-opacity-90 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-transform hover:scale-105"
                         >
                             <Phone size={16} />
-                            <span>Contáctanos</span>
+                            <span>WhatsApp</span>
                         </a>
                     </div>
 
@@ -79,10 +81,12 @@ export function Header() {
                             </Link>
                         ))}
                         <a
-                            href="tel:+123456789"
+                            href="https://wa.me/573001234567"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="w-full text-center mt-4 bg-primary text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-90"
                         >
-                            Contáctanos
+                            WhatsApp
                         </a>
                     </div>
                 </div>
