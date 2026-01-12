@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+// Force Vercel Rebuild - Timestamp: 2026-01-13
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
