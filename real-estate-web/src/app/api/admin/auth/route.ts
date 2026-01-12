@@ -3,6 +3,16 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     const formData = await request.formData();
+    const method = formData.get('_method');
+
+    // Handle logout
+    if (method === 'DELETE') {
+        const cookieStore = await cookies();
+        cookieStore.delete('admin_auth');
+        return NextResponse.redirect(new URL('/admin', request.url));
+    }
+
+    // Handle login
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
 
@@ -10,7 +20,7 @@ export async function POST(request: Request) {
     const validPass = process.env.ADMIN_PASSWORD || 'admin123';
 
     if (username === validUser && password === validPass) {
-        // Create a simple auth token (in production, use JWT or better)
+        // Create an auth token
         const authToken = Buffer.from(`${username}:${Date.now()}`).toString('base64');
 
         const cookieStore = await cookies();
@@ -22,10 +32,12 @@ export async function POST(request: Request) {
             path: '/',
         });
 
-        return NextResponse.json({ success: true });
+        // Redirect to admin page
+        return NextResponse.redirect(new URL('/admin', request.url));
     }
 
-    return NextResponse.json({ success: false, error: 'Credenciales inválidas' }, { status: 401 });
+    // Invalid credentials - redirect back with error (using query param)
+    return NextResponse.redirect(new URL('/admin?error=invalid', request.url));
 }
 
 export async function DELETE() {
