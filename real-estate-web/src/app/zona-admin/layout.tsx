@@ -30,7 +30,7 @@ export async function ProtectedAdminContent({
     const isAuth = await isAuthenticated();
 
     if (!isAuth) {
-        redirect('/admin/login');
+        redirect('/zona-admin');
     }
 
     return <>{children}</>;

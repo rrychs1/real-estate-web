@@ -209,7 +209,7 @@ export default async function AdminPage() {
                                 <h2 className="text-xl font-bold text-gray-900">Gestión de Propiedades</h2>
                                 <div className="flex gap-2">
                                     <Link
-                                        href="/admin/propiedades/crear"
+                                        href="/zona-admin/propiedades/crear"
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm transition-colors"
                                     >
                                         <Plus size={16} /> Agregar Propiedad
@@ -285,7 +285,7 @@ export default async function AdminPage() {
                                 <h2 className="text-xl font-bold text-gray-900">Gestión de Proyectos</h2>
                                 <div className="flex gap-2">
                                     <Link
-                                        href="/admin/proyectos/crear"
+                                        href="/zona-admin/proyectos/crear"
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm transition-colors"
                                     >
                                         <Plus size={16} /> Agregar Proyecto
