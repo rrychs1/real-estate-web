@@ -144,7 +144,7 @@ export default async function AdminPage() {
             <div className="bg-white shadow-sm border-b border-gray-200">
                 <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-serif font-bold text-red-600 bg-red-100 px-4 rounded-lg border-2 border-red-500">PANEL DE CONTROL - PRUEBA FINAL</h1>
+                        <h1 className="text-3xl font-serif font-bold text-gray-900">Panel de Administración</h1>
                         <p className="text-gray-500">Bienvenido de nuevo, Administrador.</p>
                     </div>
                     <form action="/api/zona-admin/auth" method="POST" className="flex">
