@@ -1,11 +1,11 @@
-// Admin authentication middleware - Protects /admin routes with HTTP Basic Auth
+// Admin authentication proxy - Protects /admin routes with HTTP Basic Auth
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
     matcher: ['/admin/:path*'],
 };
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
     const basicAuth = req.headers.get('authorization');
 
     if (basicAuth) {
