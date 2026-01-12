@@ -22,7 +22,7 @@ export function Header() {
                 <div className="flex justify-between items-center h-20">
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="text-2xl font-serif font-bold text-primary">
+                        <Link href="/" className="text-3xl font-serif font-bold text-primary tracking-tight">
                             Raiz Rentable
                         </Link>
                     </div>
@@ -33,7 +33,7 @@ export function Header() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-gray-600 hover:text-secondary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                className="text-gray-700 hover:text-primary hover:bg-primary/5 px-4 py-2.5 rounded-full text-base font-medium transition-all duration-300"
                             >
                                 {link.name}
                             </Link>
@@ -46,9 +46,9 @@ export function Header() {
                             href="https://wa.me/573001234567"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-primary text-white hover:bg-opacity-90 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-transform hover:scale-105"
+                            className="bg-[#25D366] hover:bg-[#128c7e] text-white px-6 py-2.5 rounded-full text-base font-bold flex items-center gap-2 transition-transform hover:scale-105 shadow-md hover:shadow-lg"
                         >
-                            <Phone size={16} />
+                            <Phone size={20} className="fill-current" />
                             <span>WhatsApp</span>
                         </a>
                     </div>
@@ -57,10 +57,10 @@ export function Header() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={toggleMenu}
-                            className="text-gray-500 hover:text-primary focus:outline-none p-2"
+                            className="text-gray-600 hover:text-primary focus:outline-none p-2"
                         >
                             <span className="sr-only">Abrir menú</span>
-                            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
                         </button>
                     </div>
                 </div>
@@ -68,13 +68,13 @@ export function Header() {
 
             {/* Mobile Menu */}
             {isMenuOpen && (
-                <div className="md:hidden bg-white border-t border-gray-100 absolute w-full font-serif">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <div className="md:hidden bg-white border-t border-gray-100 absolute w-full font-serif shadow-xl">
+                    <div className="px-4 pt-4 pb-6 space-y-2 sm:px-3">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-gray-600 hover:text-primary hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium"
+                                className="text-gray-700 hover:text-primary hover:bg-gray-50 block px-4 py-3 rounded-lg text-lg font-medium"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {link.name}
@@ -84,7 +84,7 @@ export function Header() {
                             href="https://wa.me/573001234567"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full text-center mt-4 bg-primary text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-90"
+                            className="w-full text-center mt-6 bg-[#25D366] text-white block px-4 py-3 rounded-lg text-lg font-bold hover:bg-[#128c7e] shadow-md"
                         >
                             WhatsApp
                         </a>
