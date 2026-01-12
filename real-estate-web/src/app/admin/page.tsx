@@ -83,7 +83,7 @@ function LoginForm() {
                         <p className="text-gray-400 mt-2">Ingresa tus credenciales para continuar</p>
                     </div>
 
-                    <form action="/api/zona-admin/auth" method="POST" className="space-y-6">
+                    <form action="/api/admin/auth" method="POST" className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">
                                 Usuario
@@ -147,7 +147,7 @@ export default async function AdminPage() {
                         <h1 className="text-3xl font-serif font-bold text-gray-900">Panel de Administración</h1>
                         <p className="text-gray-500">Bienvenido de nuevo, Administrador.</p>
                     </div>
-                    <form action="/api/zona-admin/auth" method="POST" className="flex">
+                    <form action="/api/admin/auth" method="POST" className="flex">
                         <input type="hidden" name="_method" value="DELETE" />
                         <button type="submit" className="bg-red-100 text-red-700 px-6 py-3 rounded-lg text-base font-bold hover:bg-red-200 transition-colors cursor-pointer shadow-sm border border-red-200">
                             Cerrar Sesión
@@ -209,7 +209,7 @@ export default async function AdminPage() {
                                 <h2 className="text-xl font-bold text-gray-900">Gestión de Propiedades</h2>
                                 <div className="flex gap-2">
                                     <Link
-                                        href="/zona-admin/propiedades/crear"
+                                        href="/admin/propiedades/crear"
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm transition-colors"
                                     >
                                         <Plus size={16} /> Agregar Propiedad
@@ -285,7 +285,7 @@ export default async function AdminPage() {
                                 <h2 className="text-xl font-bold text-gray-900">Gestión de Proyectos</h2>
                                 <div className="flex gap-2">
                                     <Link
-                                        href="/zona-admin/proyectos/crear"
+                                        href="/admin/proyectos/crear"
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm transition-colors"
                                     >
                                         <Plus size={16} /> Agregar Proyecto
@@ -369,7 +369,7 @@ export default async function AdminPage() {
                                     <Settings size={16} />
                                 </Link>
 
-                                <form action="/api/zona-admin/auth" method="POST">
+                                <form action="/api/admin/auth" method="POST">
                                     <input type="hidden" name="_method" value="DELETE" />
                                     <button
                                         type="submit"

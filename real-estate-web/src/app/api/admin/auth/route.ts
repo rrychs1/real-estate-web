@@ -33,11 +33,11 @@ export async function POST(request: Request) {
         });
 
         // Redirect to admin page
-        return NextResponse.redirect(new URL('/zona-admin', request.url));
+        return NextResponse.redirect(new URL('/admin', request.url));
     }
 
     // Invalid credentials - redirect back with error (using query param)
-    return NextResponse.redirect(new URL('/zona-admin?error=invalid', request.url));
+    return NextResponse.redirect(new URL('/admin?error=invalid', request.url));
 }
 
 export async function DELETE() {
