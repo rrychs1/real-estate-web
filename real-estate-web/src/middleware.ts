@@ -1,3 +1,4 @@
+// Admin authentication middleware - Protects /admin routes with HTTP Basic Auth
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
