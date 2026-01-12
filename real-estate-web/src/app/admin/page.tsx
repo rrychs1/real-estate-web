@@ -142,14 +142,14 @@ export default async function AdminPage() {
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
             <div className="bg-white shadow-sm border-b border-gray-200">
-                <div className="container mx-auto px-4 py-8 flex justify-between items-center">
+                <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-serif font-bold text-gray-900">Panel de Administración</h1>
+                        <h1 className="text-3xl font-serif font-bold text-gray-900">Panel de Administración v3</h1>
                         <p className="text-gray-500">Bienvenido de nuevo, Administrador.</p>
                     </div>
-                    <form action="/api/admin/auth" method="POST">
+                    <form action="/api/admin/auth" method="POST" className="flex">
                         <input type="hidden" name="_method" value="DELETE" />
-                        <button type="submit" className="bg-red-100 text-red-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors">
+                        <button type="submit" className="bg-red-100 text-red-700 px-6 py-3 rounded-lg text-base font-bold hover:bg-red-200 transition-colors cursor-pointer shadow-sm border border-red-200">
                             Cerrar Sesión
                         </button>
                     </form>
@@ -368,6 +368,17 @@ export default async function AdminPage() {
                                     <span>Abrir Sanity Studio</span>
                                     <Settings size={16} />
                                 </Link>
+
+                                <form action="/api/admin/auth" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-red-100 hover:bg-red-200 text-red-700 px-4 py-3 rounded-lg font-medium flex items-center justify-between gap-2 text-sm transition-colors border border-red-200"
+                                    >
+                                        <span>Cerrar Sesión</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
+                                    </button>
+                                </form>
                             </div>
 
                             <h2 className="text-xl font-bold text-gray-900 mt-8 mb-6">Últimos Mensajes</h2>
