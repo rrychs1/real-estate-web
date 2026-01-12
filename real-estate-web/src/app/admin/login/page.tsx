@@ -1,4 +1,5 @@
 'use client';
+// Admin login page - Last updated: 2026-01-12 22:10
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
