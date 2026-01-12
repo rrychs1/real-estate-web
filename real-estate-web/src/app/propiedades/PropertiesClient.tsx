@@ -157,7 +157,7 @@ export default function PropertiesClient({ properties }: PropertiesClientProps) 
                                         category: 'casa', // Default or map from CMS if available
                                         currency: property.currency || 'COP',
                                         description: property.description || '',
-                                        slug: property._id, // Ideally should be real slug if available
+                                        slug: property.slug?.current || property._id,
                                         location: {
                                             city: property.location.city,
                                             neighborhood: property.location.neighborhood || ""

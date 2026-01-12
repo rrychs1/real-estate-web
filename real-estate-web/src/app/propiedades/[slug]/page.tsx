@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { client, urlFor } from "@/lib/sanity";
 import { Property } from "@/types/sanity";
 import { Bed, Bath, Square, MapPin, ArrowLeft, Phone, Mail, Check } from "lucide-react";
+import ContactForm from "@/components/property/ContactForm";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -225,28 +226,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                                 </div>
                             </div>
 
-                            <form className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                                    <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" placeholder="Tu nombre completo" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                                    <input type="tel" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" placeholder="+57 300 ..." />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
-                                    <textarea rows={4} className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" defaultValue={`Hola, estoy interesado en ${property.title}...`}></textarea>
-                                </div>
-                                <button type="submit" className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                    <Mail size={18} />
-                                    Enviar Mensaje
-                                </button>
-                                <button type="button" className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                    <Phone size={18} />
-                                    Hablar por WhatsApp
-                                </button>
-                            </form>
+                            <ContactForm propertyTitle={property.title} propertyId={property._id} />
                         </div>
                     </aside>
                 </div>

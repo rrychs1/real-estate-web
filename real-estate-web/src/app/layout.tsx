@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${playfair.variable} antialiased flex flex-col min-h-screen bg-background`}
       >
         <Header />

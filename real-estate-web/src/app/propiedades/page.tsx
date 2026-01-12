@@ -7,6 +7,7 @@ async function getProperties(): Promise<Property[]> {
     const query = `*[_type == "property"] | order(_createdAt desc) {
         _id,
         title,
+        slug,
         price,
         currency,
         operationType,

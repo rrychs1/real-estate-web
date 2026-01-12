@@ -1,36 +1,24 @@
 import Link from "next/link";
 import { ArrowRight, TrendingUp, Shield, Clock } from "lucide-react";
+import { client } from "@/lib/sanity";
+import { urlFor } from "@/lib/sanity";
 
-export default function ProjectsPage() {
-    const projects = [
-        {
-            id: 1,
-            title: "Torre Empresarial 93",
-            description: "Oficinas inteligentes en el corazón financiero. Alta valorización garantizada.",
-            image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80",
-            status: "En Construcción",
-            completion: "2025",
-            roi: "12% E.A."
-        },
-        {
-            id: 2,
-            title: "Reserva del Bosque",
-            description: "Apartamentos rodeados de naturaleza a 15 min de la ciudad. Calidad de vida superior.",
-            image: "https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&q=80",
-            status: "En Planos",
-            completion: "2026",
-            roi: "15% Plusvalía"
-        },
-        {
-            id: 3,
-            title: "Mall Comercial Plaza Norte",
-            description: "Locales comerciales en zona de expansión urbana de alta densidad.",
-            image: "https://images.unsplash.com/photo-1519567241046-7f570eee3ce9?auto=format&fit=crop&q=80",
-            status: "Entrega Inmediata",
-            completion: "2024",
-            roi: "8% Renta"
-        }
-    ];
+async function getProjects() {
+    return await client.fetch(`*[_type == "project"] | order(_createdAt desc) {
+        _id,
+        title,
+        description,
+        slug,
+        "mainImage": mainImage.asset->url,
+        "location": location.city + ", " + location.neighborhood,
+        features,
+        priceRange,
+        "status": "En Venta" 
+    }`, {}, { cache: 'no-store' });
+}
+
+export default async function ProjectsPage() {
+    const projects = await getProjects();
 
     return (
         <div className="min-h-screen bg-gray-50 pb-16">
@@ -74,40 +62,57 @@ export default function ProjectsPage() {
 
             {/* Projects Grid */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.map((project) => (
-                        <div key={project.id} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-                            <div className="h-64 overflow-hidden relative">
-                                <div
-                                    className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                                    style={{ backgroundImage: `url(${project.image})` }}
-                                ></div>
-                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
-                                    {project.status}
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <h3 className="text-xl font-bold font-serif mb-2">{project.title}</h3>
-                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
-
-                                <div className="flex items-center justify-between py-4 border-t border-gray-100 mb-4">
-                                    <div className="text-center">
-                                        <span className="block text-xs text-gray-400 uppercase">Entrega</span>
-                                        <span className="font-bold text-gray-800">{project.completion}</span>
-                                    </div>
-                                    <div className="text-center">
-                                        <span className="block text-xs text-gray-400 uppercase">Retorno Est.</span>
-                                        <span className="font-bold text-secondary">{project.roi}</span>
+                {projects.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                        <p className="text-gray-500 text-lg">No hay proyectos disponibles en este momento.</p>
+                        <p className="text-gray-400 text-sm mt-2">¡Vuelve pronto para ver nuevas oportunidades de inversión!</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {projects.map((project: any) => (
+                            <div key={project._id} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
+                                <div className="h-64 overflow-hidden relative shrink-0">
+                                    <div
+                                        className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                        style={{ backgroundImage: `url(${project.mainImage || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80'})` }}
+                                    ></div>
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
+                                        {project.features?.deliveryDate ? `Entrega ${project.features.deliveryDate}` : 'En Venta'}
                                     </div>
                                 </div>
+                                <div className="p-6 flex flex-col flex-grow">
+                                    <h3 className="text-xl font-bold font-serif mb-2 line-clamp-1">{project.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{project.description}</p>
 
-                                <button className="w-full py-2 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2">
-                                    Solicitar Información <ArrowRight size={16} />
-                                </button>
+                                    <div className="flex items-center justify-between py-4 border-t border-gray-100 mb-4 mt-auto">
+                                        <div className="text-center w-1/2 border-r border-gray-100">
+                                            <span className="block text-xs text-gray-400 uppercase">Ubicación</span>
+                                            <span className="font-bold text-gray-800 text-sm block truncate px-2">{project.location}</span>
+                                        </div>
+                                        <div className="text-center w-1/2">
+                                            <span className="block text-xs text-gray-400 uppercase">Desde</span>
+                                            <span className="font-bold text-secondary text-sm">
+                                                {new Intl.NumberFormat('es-CO', {
+                                                    style: 'currency',
+                                                    currency: project.priceRange?.currency || 'COP',
+                                                    maximumFractionDigits: 0,
+                                                    notation: "compact"
+                                                }).format(project.priceRange?.minPrice || 0)}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <Link
+                                        href={`/proyectos/${project.slug?.current}`}
+                                        className="w-full py-2 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        Ver Proyecto <ArrowRight size={16} />
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

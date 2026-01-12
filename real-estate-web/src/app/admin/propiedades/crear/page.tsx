@@ -1,12 +1,133 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, X, Save } from "lucide-react";
+
+import { Upload, X, Save, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CreatePropertyPage() {
-    // Simple state for demonstration
-    const [images, setImages] = useState<string[]>([]);
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    // Form State
+    const [formData, setFormData] = useState({
+        title: "",
+        price: "",
+        currency: "COP",
+        operationType: "venta",
+        category: "apartamento",
+        location: {
+            city: "",
+            neighborhood: "",
+            address: ""
+        },
+        features: {
+            area: "",
+            bedrooms: "",
+            bathrooms: "",
+            parking: ""
+        },
+        commonZones: [] as string[],
+        description: "",
+        images: [] as string[]
+    });
+
+    const handleBasicChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleLocationChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            location: { ...prev.location, [name]: value }
+        }));
+    };
+
+    const handleFeatureChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            features: { ...prev.features, [name]: value }
+        }));
+    };
+
+    const toggleCommonZone = (zone: string) => {
+        setFormData(prev => {
+            const zones = prev.commonZones.includes(zone)
+                ? prev.commonZones.filter(z => z !== zone)
+                : [...prev.commonZones, zone];
+            return { ...prev, commonZones: zones };
+        });
+    };
+
+    const handleImageUpload = async (e: any) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        setLoading(true);
+        const newImageIds: string[] = [];
+
+        try {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const uploadData = new FormData();
+                uploadData.append("file", file);
+
+                const res = await fetch("/api/admin/upload", {
+                    method: "POST",
+                    body: uploadData
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success) {
+                        newImageIds.push(data.asset._id);
+                    }
+                }
+            }
+
+            setFormData(prev => ({
+                ...prev,
+                images: [...prev.images, ...newImageIds]
+            }));
+        } catch (error) {
+            console.error("Error uploading images:", error);
+            setError("Error al subir algunas imágenes");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        setError("");
+
+        try {
+            const res = await fetch("/api/admin/propiedades", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Error al crear la propiedad");
+            }
+
+            router.push("/admin");
+            router.refresh();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Hubo un error al guardar.");
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
@@ -19,17 +140,31 @@ export default function CreatePropertyPage() {
                         <h1 className="text-xl font-bold text-gray-900">Nueva Propiedad</h1>
                     </div>
                     <div className="flex gap-3">
-                        <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 text-sm">
+                        <button
+                            onClick={() => router.back()}
+                            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 text-sm"
+                        >
                             Cancelar
                         </button>
-                        <button className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 flex items-center gap-2 text-sm">
-                            <Save size={16} /> Guardar Propiedad
+                        <button
+                            onClick={handleSubmit}
+                            disabled={loading}
+                            className={`px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 flex items-center gap-2 text-sm ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                        >
+                            <Save size={16} /> {loading ? "Guardando..." : "Guardar Propiedad"}
                         </button>
                     </div>
                 </div>
             </div>
 
             <div className="container mx-auto px-4 py-8 max-w-4xl">
+                {error && (
+                    <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 flex items-center gap-3">
+                        <AlertCircle className="text-red-500" />
+                        <p className="text-red-700">{error}</p>
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 gap-8">
                     {/* Basic Info */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -37,29 +172,58 @@ export default function CreatePropertyPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Título de la Publicación</label>
-                                <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" placeholder="Ej: Apartamento con vista al mar" />
+                                <input
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleBasicChange}
+                                    type="text"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                    placeholder="Ej: Apartamento con vista al mar"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Precio</label>
-                                <input type="number" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" placeholder="0" />
+                                <input
+                                    name="price"
+                                    value={formData.price}
+                                    onChange={handleBasicChange}
+                                    type="number"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                    placeholder="0"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Moneda</label>
-                                <select className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary">
+                                <select
+                                    name="currency"
+                                    value={formData.currency}
+                                    onChange={handleBasicChange}
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                >
                                     <option value="COP">Peso Colombiano (COP)</option>
                                     <option value="USD">Dólar (USD)</option>
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Operación</label>
-                                <select className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary">
+                                <select
+                                    name="operationType"
+                                    value={formData.operationType}
+                                    onChange={handleBasicChange}
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                >
                                     <option value="venta">Venta</option>
                                     <option value="alquiler">Alquiler</option>
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-                                <select className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary">
+                                <select
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleBasicChange}
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                >
                                     <option value="apartamento">Apartamento</option>
                                     <option value="casa">Casa</option>
                                     <option value="oficina">Oficina</option>
@@ -75,15 +239,34 @@ export default function CreatePropertyPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
-                                <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="city"
+                                    value={formData.location.city}
+                                    onChange={handleLocationChange}
+                                    type="text"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Barrio</label>
-                                <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="neighborhood"
+                                    value={formData.location.neighborhood}
+                                    onChange={handleLocationChange}
+                                    type="text"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Dirección (Privada)</label>
-                                <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" placeholder="Solo visible para admin" />
+                                <input
+                                    name="address"
+                                    value={formData.location.address}
+                                    onChange={handleLocationChange}
+                                    type="text"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                    placeholder="Solo visible para admin"
+                                />
                             </div>
                         </div>
                     </div>
@@ -94,19 +277,43 @@ export default function CreatePropertyPage() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Área (m²)</label>
-                                <input type="number" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="area"
+                                    value={formData.features.area}
+                                    onChange={handleFeatureChange}
+                                    type="number"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Habitaciones</label>
-                                <input type="number" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="bedrooms"
+                                    value={formData.features.bedrooms}
+                                    onChange={handleFeatureChange}
+                                    type="number"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Baños</label>
-                                <input type="number" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="bathrooms"
+                                    value={formData.features.bathrooms}
+                                    onChange={handleFeatureChange}
+                                    type="number"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Parqueaderos</label>
-                                <input type="number" className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary" />
+                                <input
+                                    name="parking"
+                                    value={formData.features.parking}
+                                    onChange={handleFeatureChange}
+                                    type="number"
+                                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                                />
                             </div>
                         </div>
 
@@ -115,7 +322,12 @@ export default function CreatePropertyPage() {
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 {['Ascensor', 'Gimnasio', 'Piscina', 'Salón Comunal', 'BBQ', 'Parque Infantil', 'Vigilancia 24h', 'Zonas Verdes', 'Parqueadero Visitantes'].map((zone) => (
                                     <label key={zone} className="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" className="w-4 h-4 text-primary rounded focus:ring-primary border-gray-300" />
+                                        <input
+                                            type="checkbox"
+                                            checked={formData.commonZones.includes(zone)}
+                                            onChange={() => toggleCommonZone(zone)}
+                                            className="w-4 h-4 text-primary rounded focus:ring-primary border-gray-300"
+                                        />
                                         <span className="text-gray-600 text-sm">{zone}</span>
                                     </label>
                                 ))}
@@ -124,45 +336,40 @@ export default function CreatePropertyPage() {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Descripción Detallada</label>
-                            <textarea rows={5} className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"></textarea>
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleBasicChange}
+                                rows={5}
+                                className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary"
+                            ></textarea>
                         </div>
                     </div>
 
-                    {/* Media (Grid Mode) */}
+                    {/* Media */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Multimedia (Imágenes y Videos)</h2>
-
-                        {/* Images Grid */}
+                        <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Multimedia</h2>
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Galería de Imágenes</label>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {/* Placeholders for grid items */}
-                                {[1, 2, 3].map((slot) => (
-                                    <div key={slot} className="aspect-square bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 cursor-pointer transition-colors relative group">
-                                        <Upload size={24} className="mb-2" />
-                                        <span className="text-xs">Agregar Foto</span>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Imágenes</label>
+                            <div className="flex flex-wrap gap-4 mb-4">
+                                {formData.images.map((id, index) => (
+                                    <div key={index} className="w-24 h-24 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center relative">
+                                        <span className="text-xs text-gray-500">Img {index + 1}</span>
                                     </div>
                                 ))}
-                                <div className="aspect-square bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                                    <span className="text-xs text-gray-400 text-center px-2">Más casillas se generarán automáticamente</span>
-                                </div>
+                                <label className="w-24 h-24 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:bg-gray-100 cursor-pointer transition-colors">
+                                    <Upload size={24} className="mb-1" />
+                                    <span className="text-xs">Subir</span>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="hidden"
+                                    />
+                                </label>
                             </div>
-                        </div>
-
-                        {/* Videos Grid */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Videos (YouTube/Vimeo)</label>
-                            <div className="space-y-3">
-                                <div className="flex gap-2">
-                                    <input type="url" placeholder="https://youtube.com/..." className="flex-1 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-primary text-sm" />
-                                    <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-medium text-sm">Agregar</button>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="aspect-video bg-black/5 rounded-lg flex items-center justify-center border border-gray-200 text-gray-400">
-                                        <span className="text-xs">Vista previa del video</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <p className="text-xs text-gray-500">Selecciona múltiples imágenes.</p>
                         </div>
                     </div>
                 </div>

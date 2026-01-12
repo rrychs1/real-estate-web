@@ -1,4 +1,5 @@
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import GlobalContactForm from "@/components/common/GlobalContactForm";
 
 export default function ContactPage() {
     return (
@@ -67,43 +68,7 @@ export default function ContactPage() {
                     {/* Contact Form */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
                         <h2 className="text-2xl font-bold font-serif mb-6 text-gray-900">Envíanos un mensaje</h2>
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                                    <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
-                                    <input type="text" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-                                <input type="email" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                                <input type="tel" className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Asunto</label>
-                                <select className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors text-gray-600">
-                                    <option>Información general</option>
-                                    <option>Ventas</option>
-                                    <option>Arriendos</option>
-                                    <option>Proyectos</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
-                                <textarea rows={4} className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:outline-none transition-colors"></textarea>
-                            </div>
-
-                            <button type="submit" className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 text-lg">
-                                Enviar Mensaje <Send size={20} />
-                            </button>
-                        </form>
+                        <GlobalContactForm />
                     </div>
                 </div>
             </div>
